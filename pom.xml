@@ -18,31 +18,38 @@
 	</properties>
 	<dependencies>
 		<dependency>
+		<!--Tratar dados, conexão com bancos de dados e associação de obejtos com as tabelas ao banco -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+		<!--Todas anotações e bibliotecas para criar um servidor Rest(controllers) -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
+		<!--Para reniciar o servidor automaticamente ao salvar -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+		<!--Tratar dados, conexão com bancos de dados e associação de obejtos com as tabelas ao banco -->
+		<!--Com outras dependencias da para fazer um banco de dado em memoria -->
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+		<!-- Para fazer o CRUD -->
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+		<!-- Para teste -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
