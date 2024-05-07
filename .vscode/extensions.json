@@ -1,5 +1,9 @@
 {
     "recommendations": [
-        "pkief.material-icon-theme"
+        "pkief.material-icon-theme",
+        "vscjava.vscode-java-pack",
+        "pivotal.vscode-boot-dev-pack",
+        "sohibe.java-generate-setters-getters",
+        "ritwickdey.liveserver"
     ]
 }
