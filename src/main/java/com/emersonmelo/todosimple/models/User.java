@@ -14,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -97,7 +98,8 @@ public class User {
         this.password = password;
     }
 
-
+    //JsonIgnore = para ignorar quando a gente for retornar apenas o usuario, nao retornar todas as tasks dele junto
+    @JsonIgnore
     public List<Task> getTasks() {
         return this.tasks;
     }
