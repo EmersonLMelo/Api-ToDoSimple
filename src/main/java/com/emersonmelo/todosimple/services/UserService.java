@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emersonmelo.todosimple.models.User;
-import com.emersonmelo.todosimple.repositories.TaskRepository;
 import com.emersonmelo.todosimple.repositories.UserRepository;
 
 //Service = para indicar que eles mantêm a lógica de service
@@ -17,9 +16,6 @@ public class UserService {
     //Autowired = indica um ponto aonde a injeção automática deve ser aplicada, sem usar construtores ou getters and setters
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private TaskRepository taskRepository;
 
     //Optional = para evitar null pointer exception, por que vc pode receber ou não um usuario
     //userRepository.findById = vem direto do extends jpaRepository
@@ -33,13 +29,12 @@ public class UserService {
     }
 
     //Transactional = Muito aspectos melhoram quando usamos este recurso, como por exemplo a legibilidade do código, e até a possibilidade de chamar outros métodos que já estejam em transação(recomendado apenas em inserções de dado como create e update)
-    //userRepository.save = salva todo o obj mandando pelo usuario e taskRepository.saveAll salva todas as taks caso o usuario crie um usuario com tasks ja
+    //userRepository.save = salva todo o obj mandando pelo usuario
     //obj.setId(null) = garante que na hora de criação o usuario não passe nenhum id, pois o id deve ser gerado automaticamente
     @Transactional
     public User create(User obj){
         obj.setId(null);
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
         return obj;
     }
 
