@@ -1,5 +1,6 @@
 package com.emersonmelo.todosimple.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -24,6 +25,12 @@ public class TaskService {
         Optional<Task> task = this.taskRepository.findById(id);
         return task.orElseThrow(() -> new RuntimeException(
             "Tarefa não encontrada! Id: " + id + ", Tipo: " + Task.class.getName() ));
+    }
+
+    //Função para buscar uma lista de tasks pelo id de um usuario
+    public List<Task> findAllByUserId(Long userId){
+        List<Task> tasks = this.taskRepository.findByUser_Id(userId);
+        return tasks;
     }
 
     //obj.setUser(user) = garantir que os dados do usuario sao os que estao no banco
