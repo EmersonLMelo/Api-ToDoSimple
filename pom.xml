@@ -66,6 +66,14 @@
 			<version>2.7.3</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+		<!-- Gera os getters, setters e constuctors automaticamente em tempo de build -->
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
