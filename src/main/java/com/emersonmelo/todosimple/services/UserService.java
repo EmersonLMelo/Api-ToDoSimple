@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emersonmelo.todosimple.models.User;
 import com.emersonmelo.todosimple.repositories.UserRepository;
+import com.emersonmelo.todosimple.services.exceptions.DataBindingViolationException;
+import com.emersonmelo.todosimple.services.exceptions.ObjectNotFoundException;
 
 //Service = para indicar que eles mantêm a lógica de service
 @Service
@@ -20,10 +22,10 @@ public class UserService {
     //Optional = para evitar null pointer exception, por que vc pode receber ou não um usuario
     //userRepository.findById = vem direto do extends jpaRepository
     //user.orElseThrow = Retorno o usuario se ele tiver prenchido, se tiver vazio eu faço um throw exception
-    //RuntimeException = para permitir que o programa continue rodando mesmo se um usuario fazer uma busca vazia, e exibe uma mensagem
+    //ObjectNotFoundException = caso o usuario não exista é lançada a exceção da classe
     public User findById(Long id){
         Optional<User> user = this.userRepository.findById(id);
-        return user.orElseThrow(() -> new RuntimeException(
+        return user.orElseThrow(() -> new ObjectNotFoundException(
             "Usuário não encontrado! " + id + ", Tipo: " + User.class.getName()
         ));
     }
@@ -50,12 +52,13 @@ public class UserService {
 
     //findById(id) = busca o usuario pelo id para saber se ele realmente existe antes de deletar
     //Try Catch = é colocado na função delete para garantir que o usuario não tem relacionamento com mais nenhum outro usuario antes de ser deletado
+    //DataBindingViolationException = caso o usuario não possa ser deletado é lançado a exceção da classe
     public void delete(Long id){
         findById(id);
         try {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possivel excluir pois há entidades relacionadas!");
+            throw new DataBindingViolationException("Não é possivel excluir pois há entidades relacionadas!");
         }
     }
 
