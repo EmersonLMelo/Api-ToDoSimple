@@ -1,10 +1,16 @@
 package com.emersonmelo.todosimple.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +20,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.emersonmelo.todosimple.models.enums.ProfileEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -73,5 +80,22 @@ public class User {
     @JsonProperty(access = Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<Task>();
 
-   
+
+    //@ElementCollection(fetch = FetchType.EAGER) = Indica que profiles é uma coleção de elementos, e que eles devem ser recuperados imediatamente (EAGER) quando a entidade for carregada
+    //private Set<Integer> profiles = new HashSet<>() = define um campo que armazena os perfis de usuário como um conjunto de inteiros. Este conjunto contem os códigos dos perfis dos usuários
+    @Column(name = "profile", nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_profile")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<Integer> profiles = new HashSet<>();
+
+    //transforma os códigos de perfil (inteiros) em objetos ProfileEnum e os coleta em um conjunto
+    public Set<ProfileEnum> getProfiles() {
+        return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    //adiciona um novo perfil ao conjunto profiles convertendo o enum para seu código correspondente.
+    public void addProfile(ProfileEnum profileEnum) {
+        this.profiles.add(profileEnum.getCode());
+    }
 }
