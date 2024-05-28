@@ -54,6 +54,14 @@ public class JWTUtil {
         return false;
     }
 
+    //este método é usado para recuperar o nome de usuário de um token JWT válido
+    public String getUsername(String token){
+        Claims claims = getClaims(token);
+        if (Objects.nonNull(claims)) 
+            return claims.getSubject();
+        return null;
+    }
+
     //Ele verifica a assinatura do token usando a chave secreta e, se a assinatura for válida, retorna as reivindicações contidas no token
     private Claims getClaims(String token){
         SecretKey key = getKeyBySecret();
