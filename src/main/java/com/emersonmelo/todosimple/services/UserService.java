@@ -1,10 +1,12 @@
 package com.emersonmelo.todosimple.services;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emersonmelo.todosimple.models.User;
 import com.emersonmelo.todosimple.models.enums.ProfileEnum;
 import com.emersonmelo.todosimple.repositories.UserRepository;
+import com.emersonmelo.todosimple.security.UserSpringSecurity;
+import com.emersonmelo.todosimple.services.exceptions.AuthorizationException;
 import com.emersonmelo.todosimple.services.exceptions.DataBindingViolationException;
 import com.emersonmelo.todosimple.services.exceptions.ObjectNotFoundException;
 
@@ -31,6 +35,10 @@ public class UserService {
     //user.orElseThrow = Retorno o usuario se ele tiver prenchido, se tiver vazio eu faço um throw exception
     //ObjectNotFoundException = caso o usuario não exista é lançada a exceção da classe
     public User findById(Long id){
+        UserSpringSecurity userSpringSecurity = authenticated();
+        if(Objects.nonNull(userSpringSecurity) || userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
+            throw new AuthorizationException("Acesso negado!");
+
         Optional<User> user = this.userRepository.findById(id);
         return user.orElseThrow(() -> new ObjectNotFoundException(
             "Usuário não encontrado! " + id + ", Tipo: " + User.class.getName()
@@ -70,6 +78,15 @@ public class UserService {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
             throw new DataBindingViolationException("Não é possivel excluir pois há entidades relacionadas!");
+        }
+    }
+
+    //este método tem o propósito de fornecer acesso fácil ao usuário atualmente autenticado em um contexto de Spring Security
+    public static UserSpringSecurity authenticated(){
+        try {
+            return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
         }
     }
 
