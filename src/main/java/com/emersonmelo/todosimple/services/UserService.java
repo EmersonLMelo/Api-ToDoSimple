@@ -36,7 +36,7 @@ public class UserService {
     //ObjectNotFoundException = caso o usuario não exista é lançada a exceção da classe
     public User findById(Long id){
         UserSpringSecurity userSpringSecurity = authenticated();
-        if(Objects.nonNull(userSpringSecurity) || userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
+        if(!Objects.nonNull(userSpringSecurity) || userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
             throw new AuthorizationException("Acesso negado!");
 
         Optional<User> user = this.userRepository.findById(id);
