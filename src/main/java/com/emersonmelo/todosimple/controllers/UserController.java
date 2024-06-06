@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.emersonmelo.todosimple.models.User;
-import com.emersonmelo.todosimple.models.User.CreateUser;
-import com.emersonmelo.todosimple.models.User.UpdateUser;
+import com.emersonmelo.todosimple.models.dto.UserCreateDTO;
+import com.emersonmelo.todosimple.models.dto.UserUpdateDTO;
 import com.emersonmelo.todosimple.services.UserService;
 
 //RestController = retorna o objeto e os dados do objeto são gravados diretamente na resposta HTTP como JSON ou XML
@@ -44,17 +44,15 @@ public class UserController {
     }
 
     //PostMapping = fala que é uma função Post
-    //Validated(CreateUser.class) = garante a coleção de validaçôes que pertence a essa interface
-    //Valid = para dizer que é esse objeto que deve ser validado
     //RequestBody = para indicar ao Spring que um recurso não será enviado ou recebido por meio de uma página da Web
     //ServletUriComponentsBuilder... = ele fazer um build pegando o contesto da requisição atual(nesse caso o /user), depois vai pegar o path do path variable(caindo assim no /user/id)
     //buildAndExpand... = depois um build para transformar a variavel id do path no id do usuario, e assim transformando tudo em uri
     //URI = nada mais é que uma String com o endereço do local do servidor requisitado
     @PostMapping
-    @Validated(CreateUser.class)
-    public ResponseEntity<Void> create(@Valid @RequestBody User obj){
-        this.userService.create(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+    public ResponseEntity<Void> create(@Valid @RequestBody UserCreateDTO obj){
+        User user = this.userService.fromDTO(obj);
+        User newUser = this.userService.create(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
@@ -62,10 +60,10 @@ public class UserController {
     //obj.setId(id) = encontrar o usuario pelo id e garatir que existe
     //noContent() = não estamos retornando nenhum dado, so atualizando
     @PutMapping("/{id}")
-    @Validated(UpdateUser.class)
-    public ResponseEntity<Void> update(@Valid @RequestBody User obj, @PathVariable Long id){
+    public ResponseEntity<Void> update(@Valid @RequestBody UserUpdateDTO obj, @PathVariable Long id){
         obj.setId(id);
-        this.userService.update(obj);
+        User user = this.userService.fromDTO(obj);
+        this.userService.update(user);
         return ResponseEntity.noContent().build();
     }
 

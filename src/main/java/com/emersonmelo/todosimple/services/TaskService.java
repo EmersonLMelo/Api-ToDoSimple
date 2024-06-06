@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.emersonmelo.todosimple.models.Task;
 import com.emersonmelo.todosimple.models.User;
 import com.emersonmelo.todosimple.models.enums.ProfileEnum;
+import com.emersonmelo.todosimple.models.projection.TaskProjection;
 import com.emersonmelo.todosimple.repositories.TaskRepository;
 import com.emersonmelo.todosimple.security.UserSpringSecurity;
 import com.emersonmelo.todosimple.services.exceptions.AuthorizationException;
@@ -38,11 +39,11 @@ public class TaskService {
     }
 
     //Função para buscar uma lista de tasks pelo id de um usuario
-    public List<Task> findAllByUser(){
+    public List<TaskProjection> findAllByUser(){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if(Objects.isNull(userSpringSecurity))
             throw new AuthorizationException("Acesso negado");
-        List<Task> tasks = this.taskRepository.findByUser_Id(userSpringSecurity.getId());
+        List<TaskProjection> tasks = this.taskRepository.findByUser_Id(userSpringSecurity.getId());
         return tasks;
     }
 

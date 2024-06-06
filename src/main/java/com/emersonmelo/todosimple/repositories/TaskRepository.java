@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.emersonmelo.todosimple.models.Task;
+import com.emersonmelo.todosimple.models.projection.TaskProjection;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     
     //Fazer uma lista de tasks de um usuario, buscando ele pelo id, usando apenas o spring
-    List<Task> findByUser_Id(Long id);
+    List<TaskProjection> findByUser_Id(Long id);
 
     //Query = exemplo para fazer uma busca em JPQL, nesse caso selecionando todas t(tasks) de Task onde t.user.id(o id do usuario) é iqual o id(id de busca)
     //Param("id") = para indentificar o nome do parametro buscado
