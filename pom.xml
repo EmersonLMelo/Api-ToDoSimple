@@ -16,6 +16,16 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<packaging>jar</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<finalName>todosimpleapp</finalName>
+	</build>
 	<dependencies>
 		<dependency>
 		<!--Tratar dados, conexão com bancos de dados e associação de obejtos com as tabelas ao banco -->
@@ -111,13 +121,6 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	
 
 </project>
